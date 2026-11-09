@@ -47,6 +47,11 @@ lines = [
     "",
     "Labels come from this simulator's vacuum model (see `sim.py`), so the model learns the simulator, not a real gripper.",
 ]
+if (R / "failure_breakdown.json").exists():
+    fb = json.loads((R / "failure_breakdown.json").read_text())
+    lines += ["", "## Why pallets failed (source: `results/failure_breakdown.json`)", "",
+              f"{fb['failed_pallets']} failed pallets; reasons per failed pallet: "
+              + ", ".join(f"{k} {v}" for k, v in fb["reasons_per_failed_pallet"].items()) + "."]
 if (R / "pytest.txt").exists():
     lines += ["", "## Tests (source: `results/pytest.txt`)", "", "```", (R / "pytest.txt").read_text().strip().splitlines()[-1], "```"]
 (R.parent / "RESULTS.md").write_text("\n".join(lines) + "\n")

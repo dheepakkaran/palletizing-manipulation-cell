@@ -28,5 +28,19 @@ One time-boxed Claude Code session, 2026-11-09, start 14:19 EST. Simulation only
 - The first-fit baseline is only checked by the rule checker, not executed in physics.
 - Cases are fed from a sequencing buffer in the order the planner asks for (a teleport to the pick spot stands in for the conveyor).
 
+- 14:45 sweep done (360 picks: 220 held, 131 peel, 9 pull); MLP trained (held-out 0.956 vs rule 0.700).
+- 14:45–14:58 eval, 50 pallets, 3 workers (745 s wall; machine load average 17–32 from the parallel build).
+- 14:58–15:01 pytest 9/9, render, `RESULTS.md`, README, commit.
+
+## Result in one line
+22 / 50 pallets fully correct. Failed pallets: drops (peel) 13 events, 32 unstable cases (knocked or
+shifted > 20 mm / tilted > 5 deg after settle), 16 cases the pallet camera could not find (usually the
+same knocked cases), 1 IK failure. Planner 0 rule violations vs first-fit 149 on the same cases.
+The "stable pallets" claim holds for the rule side (planner) but the physical success rate is 44 %.
+
 ## Remaining
-- See bottom of this file after the eval run.
+- Find why cases get knocked (likely the carried case or pad brushing neighbours on descent with
+  2-3 cm gaps, and joint-space moves between the safe-height waypoints): add a collision check on
+  the carried case, larger cell pitch, or slower final descent; re-run the eval.
+- Compare drops with vs without grasp-model gating (`eval.py --no-model --tag _nomodel`) — not run (time).
+- Vision mis-detections of knocked cases inflate p95 placement error; split vision error vs true error.

@@ -1,0 +1,13 @@
+{
+ "failed_pallets": 28,
+ "reasons_per_failed_pallet": {
+  "not_found_by_vision": 3,
+  "drop+unstable+not_found_by_vision": 3,
+  "drop": 9,
+  "unstable": 6,
+  "unstable+not_found_by_vision": 5,
+  "ik_fail": 1,
+  "drop+unstable": 1
+ },
+ "pallets_with_any_unstable": 15
+}
