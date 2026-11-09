@@ -134,7 +134,7 @@ class Cell:
         return d.site_xpos[self.tcp].copy(), d.site_xmat[self.tcp].reshape(3, 3).copy()
 
     # -------------------------------------------------------------------- IK
-    def ik(self, target_pos, target_rot=DOWN, q0=None, iters=300, damping=0.05, rng=None):
+    def ik(self, target_pos, target_rot=DOWN, q0=None, iters=300, damping=0.05, rng=None, seed_first=False):
         """DLS IK for the tool-centre point (position + orientation). Returns q or None."""
         rng = rng or np.random.default_rng(0)
         m, kd = self.m, self.kd
@@ -157,6 +157,8 @@ class Cell:
             g[6] = np.clip(q7, self.lo[6], self.hi[6])
         seeds = [g, self.d.qpos[:ARM].copy() if q0 is None else np.asarray(q0, float), HOME.copy()]
         seeds += [g + rng.normal(0, 0.3, ARM) for _ in range(5)]
+        if seed_first and q0 is not None:  # continuous paths: stay on the current IK branch
+            seeds.insert(0, np.asarray(q0, float))
         jp, jr = np.zeros((3, m.nv)), np.zeros((3, m.nv))
         for q in seeds:
             q = np.clip(q, self.lo, self.hi)
@@ -227,11 +229,14 @@ class Cell:
     def move_linear(self, pos, rot=DOWN, n=10, speed=0.25, hold=0.1):
         """Straight-line TCP move: IK at n points along the line (each seeded with the last),
         streamed as one smooth joint trajectory at about `speed` m/s."""
-        p0, _ = self.tcp_pose()
+        p0, R0 = self.tcp_pose()
         pos = np.asarray(pos, float)
+        y0, y1 = yaw_of(R0 @ DOWN.T), yaw_of(rot @ DOWN.T)
+        dy = np.angle(np.exp(1j * (y1 - y0)))
         qs, q = [self.d.ctrl[:ARM].copy()], self.d.ctrl[:ARM].copy()
         for k in range(1, n + 1):
-            q = self.ik(p0 + (pos - p0) * k / n, rot, q0=q)
+            rk = rot if k == n else rot_z(y0 + dy * k / n) @ DOWN  # tool yaw turns smoothly
+            q = self.ik(p0 + (pos - p0) * k / n, rk, q0=q, seed_first=True)
             if q is None:
                 return False
             qs.append(q)

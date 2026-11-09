@@ -1,0 +1,63 @@
+{
+  "pallets": 50,
+  "pallet_success": 23,
+  "pallet_success_rate": 0.46,
+  "cases_ordered": 434,
+  "cases_missing_injected": 11,
+  "cases_placed": 387,
+  "events_by_type": {
+    "drop_peel": 36,
+    "missing": 11
+  },
+  "drops_by_cause": {
+    "drop_peel": 36
+  },
+  "unstable_cases": 0,
+  "vision_not_found": 0,
+  "grasp_model_flags": 0,
+  "placement_error_mm": {
+    "mean": 4.683259539429646,
+    "median": 4.5651072200217,
+    "p95": 6.970357037961019,
+    "max": 7.30427552019505,
+    "n": 387
+  },
+  "tilt_deg_from_depth": {
+    "mean": 0.0009878487155040043,
+    "p95": 0.0005220284403292898,
+    "max": 0.14632529868110888
+  },
+  "min_gap_to_neighbour_mm": {
+    "mean": 25.65581543824157,
+    "min": 17.080530524253845,
+    "n": 370
+  },
+  "layer_flatness_mm": {
+    "mean": 0.7947352197435167,
+    "max": 19.999980926513672,
+    "n_layers": 126
+  },
+  "rule_violations_planner": {
+    "crush": 0,
+    "heavy_on_light": 0,
+    "uneven_layer": 5,
+    "overflow": 0,
+    "total": 5
+  },
+  "rule_violations_first_fit_same_cases": {
+    "crush": 33,
+    "heavy_on_light": 36,
+    "uneven_layer": 80,
+    "overflow": 0,
+    "total": 149
+  },
+  "sim_time_per_pallet_s_mean": 92.85851999996483,
+  "picks_attempted_approx": 423,
+  "config": {
+    "pallets": 50,
+    "seed": 0,
+    "grasp_model": false,
+    "grasp_sigma_m": 0.012,
+    "wall_s": 439.07081723213196
+  }
+}

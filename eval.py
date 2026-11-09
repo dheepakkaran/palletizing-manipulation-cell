@@ -21,7 +21,7 @@ RES = ROOT / "results"
 
 
 def _worker(args):
-    ids, seed, use_model, sigma = args
+    ids, seed, use_model, sigma, tag = args
     os.environ.setdefault("MUJOCO_GL", "egl")
     from grasp_model import GraspModel
     from metrics import layer_flatness, neighbour_gaps
@@ -33,7 +33,7 @@ def _worker(args):
     cell = Cell()
     pick, pal = DepthCamera(cell, "pick_cam"), DepthCamera(cell, "pallet_cam")
     out = []
-    log_path = RES / f"transitions_{ids[0]:03d}.jsonl"
+    log_path = RES / f"part{tag}_{ids[0]:03d}.jsonl"
     with open(log_path, "w") as log:
         for pid in ids:
             rng = np.random.default_rng(seed * 1000 + pid)
@@ -114,7 +114,7 @@ def main():
     a = ap.parse_args()
     from multiprocessing import get_context
     ids = list(range(a.pallets))
-    chunks = [(ids[i::a.workers], a.seed, not a.no_model, a.sigma) for i in range(a.workers)]
+    chunks = [(ids[i::a.workers], a.seed, not a.no_model, a.sigma, a.tag) for i in range(a.workers)]
     t = time.time()
     with get_context("spawn").Pool(a.workers) as pool:
         pallets = sorted([p for ch in pool.map(_worker, chunks) for p in ch], key=lambda p: p["pallet"])
@@ -132,7 +132,7 @@ def main():
     (RES / f"eval_summary{tag}.json").write_text(json.dumps(s, indent=2))
     # merge per-worker transition logs
     with open(RES / f"transitions{tag}.jsonl", "w") as f:
-        for p in sorted(RES.glob("transitions_*.jsonl")):
+        for p in sorted(RES.glob(f"part{tag}_*.jsonl")):
             f.write(p.read_text())
             p.unlink()
     print(json.dumps(s, indent=2))

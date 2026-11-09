@@ -45,3 +45,20 @@ The "stable pallets" claim holds for the rule side (planner) but the physical su
   the carried case, larger cell pitch, or slower final descent; re-run the eval.
 - Compare drops with vs without grasp-model gating (`eval.py --no-model --tag _nomodel`) — not run (time).
 - Vision mis-detections of knocked cases inflate p95 placement error; split vision error vs true error.
+
+## Round 2 (15:00–15:16, machine free)
+- Motion fix (v2): lift vertically to max(0.50, tallest stack top + carried case height + 0.10 m), one smooth
+  joint move over the target at that height, vertical descent to just above the place pose, release,
+  vertical retreat. IK on straight-line moves now seeds from the previous waypoint (stays on one branch).
+- Tried first: a level straight-line (20-waypoint) transfer. Piecewise-linear joint commands gave
+  acceleration spikes and many pull/peel drops (37 in the first ~8 pallets), so it was killed and replaced
+  by the single smooth joint move above. Not in the results.
+- Old run kept as `results/*_v1.*`. Re-ran the same 50 pallets (seed 0) with the grasp model on
+  (`eval_summary.json`) and off (`eval_summary_nomodel.json`, no pre-pick check at all; the offset rule was not run in the eval).
+- Before -> after (model on): 22 -> 36 / 50 pallets; unstable cases 32 -> 0; not found by camera 16 -> 0;
+  placement error mean 9.11 -> 4.76 mm, median 4.84 -> 4.62 mm; peel drops 13 -> 13.
+- Model on vs off (v2): 36 vs 23 / 50 pallets; peel drops 13 vs 36.
+- Camera "not found" cases disappeared with the motion fix (they were knocked cases), so no camera change was needed.
+- Note: the grasp model was trained on the v1 sweep (lift + joint move); not retrained for v2.
+- Remaining: the 13 peel drops (lower transfer acceleration for heavy cases, or a seal check that
+  re-measures the offset after contact); the one IK-unreachable target; a run with the offset rule as the gate.

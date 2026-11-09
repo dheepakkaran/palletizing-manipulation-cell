@@ -149,15 +149,17 @@ class Controller:
             elif self.state == S.TRANSFER:
                 Rt = rot_z(grasp["yaw"]) @ DOWN
                 gx, gy = grasp["xy"]
-                c.move_linear([gx, gy, SAFE_Z], Rt, speed=0.4)
+                # v2: lift vertically to a height that clears the tallest stack with the carried case
+                hz = max(SAFE_Z, max(actual.place_z(cc) for cc in actual.cols) + ctype(pl.case).size[2] + 0.10)
+                c.move_linear([gx, gy, hz], Rt, speed=0.4)
                 tgt = pl.target
                 # TCP target so the case centre lands on the cell centre (grasp offset kept)
                 rel = c.case_pose(pl.case)[0][:2] - c.tcp_pose()[0][:2]
-                above = np.array([tgt[0], tgt[1], SAFE_Z])
+                above = np.array([tgt[0], tgt[1], hz])
                 # after rotating the tool to DOWN (yaw 0), the case-centre offset rotates with it
                 rel_after = rot_z(-grasp["yaw"])[:2, :2] @ rel
                 above[:2] -= rel_after
-                reached = c.move_tcp(above, DOWN)
+                reached = c.move_tcp(above, DOWN)  # v2: one smooth joint move at the raised height
                 g = c.grip
                 if not reached and g.case is not None:
                     events.append({"case": pl.case, "event": "fail_ik_unreachable"})
@@ -173,6 +175,7 @@ class Controller:
                     self.go(S.FAIL, case=pl.case, reason=f"drop_{cause}")
                     continue
                 self._place_xy = above[:2]
+                self._hz = hz
                 self.go(S.PLACE, case=pl.case, peak_force=g.peak_force, peak_torque=g.peak_torque)
             elif self.state == S.PLACE:
                 h = ctype(pl.case).size[2]
@@ -182,7 +185,7 @@ class Controller:
                 c.move_linear([px, py, top + 0.006], DOWN)
                 c.release()
                 c.step(150)
-                c.move_linear([px, py, SAFE_Z], DOWN, speed=0.4)
+                c.move_linear([px, py, self._hz], DOWN, speed=0.4)  # vertical retreat
                 c.move_tcp(CLEAR, DOWN)  # out of the pallet camera's view before VERIFY
                 self.go(S.VERIFY, case=pl.case)
             elif self.state == S.VERIFY:

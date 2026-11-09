@@ -1,7 +1,7 @@
 {
   "pallets": 50,
-  "pallet_success": 22,
-  "pallet_success_rate": 0.44,
+  "pallet_success": 36,
+  "pallet_success_rate": 0.72,
   "cases_ordered": 434,
   "cases_missing_injected": 11,
   "cases_placed": 409,
@@ -13,30 +13,30 @@
   "drops_by_cause": {
     "drop_peel": 13
   },
-  "unstable_cases": 32,
-  "vision_not_found": 16,
+  "unstable_cases": 0,
+  "vision_not_found": 0,
   "grasp_model_flags": 52,
   "placement_error_mm": {
-    "mean": 9.107164795954937,
-    "median": 4.841371832220389,
-    "p95": 39.62034361140993,
-    "max": 66.91919030041863,
-    "n": 393
+    "mean": 4.760710329172339,
+    "median": 4.616396564393448,
+    "p95": 7.173878363101717,
+    "max": 7.311462255034428,
+    "n": 409
   },
   "tilt_deg_from_depth": {
-    "mean": 0.25222454507858494,
-    "p95": 0.007585537233463531,
-    "max": 33.04635314846424
+    "mean": 0.0016537499293219644,
+    "p95": 0.00042748081993808487,
+    "max": 0.14632529868110888
   },
   "min_gap_to_neighbour_mm": {
-    "mean": 25.025810284811694,
-    "min": -20.17170935869217,
-    "n": 384
+    "mean": 25.239796007997427,
+    "min": 17.080530524253845,
+    "n": 398
   },
   "layer_flatness_mm": {
-    "mean": 2.545925049946226,
-    "max": 34.046292304992676,
-    "n_layers": 116
+    "mean": 0.0011510207873432576,
+    "max": 0.008344650268554688,
+    "n_layers": 119
   },
   "rule_violations_planner": {
     "crush": 0,
@@ -52,13 +52,14 @@
     "overflow": 0,
     "total": 149
   },
-  "sim_time_per_pallet_s_mean": 97.89795999995326,
+  "sim_time_per_pallet_s_mean": 93.6739999999631,
   "picks_attempted_approx": 423,
   "config": {
     "pallets": 50,
     "seed": 0,
     "grasp_model": true,
     "grasp_sigma_m": 0.012,
-    "wall_s": 744.5130572319031
+    "wall_s": 440.885356426239
   }
 }
+DONE_ON

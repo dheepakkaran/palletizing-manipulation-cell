@@ -1,0 +1,7 @@
+{
+ "failed_pallets": 27,
+ "reasons_per_failed_pallet": {
+  "drop": 27
+ },
+ "pallets_with_any_unstable": 0
+}

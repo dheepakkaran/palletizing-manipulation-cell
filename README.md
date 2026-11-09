@@ -41,23 +41,21 @@ export MUJOCO_GL=egl
 ```
 
 ## Numbers
-From `results/eval_summary.json` and `results/grasp_model.json` (full table + sources in `RESULTS.md`).
-50 randomized pallets (`eval.py --pallets 50 --seed 0`, 434 cases ordered, 11 missing injected):
+From `results/eval_summary*.json` and `results/grasp_model.json` (full tables + sources in `RESULTS.md`).
+Same 50 randomized pallets (`eval.py --pallets 50 --seed 0`, 434 cases ordered, 11 missing injected):
 
-| Metric | Value |
-|---|---|
-| Pallets fully correct | 22 / 50 (0.44) |
-| Drops by cause | peel 13 (pull 0) |
-| Unstable cases after settle / cases not found by the camera | 32 / 16 (of 409 placed) |
-| Placement error from the depth camera (mm), 393 cases | mean 9.11, median 4.84, p95 39.62 |
-| Top-face tilt from depth (deg) | mean 0.252, max 33.0 |
-| Rule violations: planner vs first-fit on the same cases | 0 vs 149 |
-| Grasp-risk MLP vs offset rule, held-out accuracy (90 picks) | 0.956 vs 0.700 |
-| pytest | 9 passed |
+| Run | Pallets correct | Drops (peel) | Unstable / not found | Placement error mean / median (mm) |
+|---|---|---|---|---|
+| v1: joint-space transfer at a fixed height (`eval_summary_v1.json`) | 22 / 50 | 13 | 32 / 16 | 9.11 / 4.84 |
+| v2: vertical lift above the stack top, transfer, vertical descent (`eval_summary.json`) | 36 / 50 | 13 | 0 / 0 | 4.76 / 4.62 |
+| v2 with the grasp model off (`eval_summary_nomodel.json`) | 23 / 50 | 36 | 0 / 0 | 4.68 / 4.57 |
 
-**Read these honestly:** 22/50 is the real pallet success rate. Most failures are knocked or
-shifted cases (the cell has no collision-aware planner; straight-line moves next to 2-3 cm gaps)
-and peel drops; see `RESULTS.md` and `BUILD-LOG.md`.
+- Planner vs first-fit rule violations on the same cases: 0 vs 149 (v2, model on); 5 vs 149 with the model off (more drops -> more replans through the planner's soft fallback).
+- Grasp-risk MLP vs offset rule, held-out accuracy (90 picks): 0.956 vs 0.700. In the eval, gating picks with it (52 flags -> RETRY) cut drops from 36 to 13.
+- pytest: 9 passed.
+
+**Read these honestly:** all 14 failed v2 pallets failed from a peel drop (13) or one unreachable IK target;
+drops and the grasp labels both come from this simulator's simple vacuum model.
 
 ## Limits (read these)
 - Vacuum physics is a simple model (holding force = vacuum x sealed area, peel lever = 0.4 x pad radius); drops and grasp labels come from it, so the grasp model learns this simulator, not a real gripper.

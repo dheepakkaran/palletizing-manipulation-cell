@@ -52,6 +52,19 @@ if (R / "failure_breakdown.json").exists():
     lines += ["", "## Why pallets failed (source: `results/failure_breakdown.json`)", "",
               f"{fb['failed_pallets']} failed pallets; reasons per failed pallet: "
               + ", ".join(f"{k} {v}" for k, v in fb["reasons_per_failed_pallet"].items()) + "."]
+# before/after + model on/off comparison
+runs = [("v1: joint-space transfer (first run), model on", "_v1"), ("v2: vertical lift above stack top + 0.10 m, transfer, vertical descent, model on", ""),
+        ("v2, grasp model off (no pre-pick check)", "_nomodel")]
+have = [(n, t) for n, t in runs if (R / f"eval_summary{t}.json").exists()]
+if len(have) > 1:
+    lines += ["", "## Before / after and grasp model on / off (same 50 pallets, seed 0)", "",
+              "| Run (source file) | Pallets correct | Drops by cause | Model flags | Unstable cases | Not found by camera | Placement error mean / median (mm) |",
+              "|---|---|---|---|---|---|---|"]
+    for n, t in have:
+        x = json.loads((R / f"eval_summary{t}.json").read_text())
+        d = ", ".join(f"{k.replace('drop_', '')} {v}" for k, v in x["drops_by_cause"].items()) or "none"
+        lines.append(f"| {n} (`eval_summary{t}.json`) | {x['pallet_success']} / {x['pallets']} | {d} | {x['grasp_model_flags']} | "
+                     f"{x['unstable_cases']} | {x['vision_not_found']} | {x['placement_error_mm']['mean']:.2f} / {x['placement_error_mm']['median']:.2f} |")
 if (R / "pytest.txt").exists():
     lines += ["", "## Tests (source: `results/pytest.txt`)", "", "```", (R / "pytest.txt").read_text().strip().splitlines()[-1], "```"]
 (R.parent / "RESULTS.md").write_text("\n".join(lines) + "\n")
