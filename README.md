@@ -37,7 +37,7 @@ export MUJOCO_GL=egl
 .venv/bin/python grasp_model.py train                    # grasp-risk model
 .venv/bin/python eval.py --pallets 50 --workers 3 --seed 0
 .venv/bin/python -m pytest -q
-.venv/bin/python make_results.py && .venv/bin/python render_pallet.py
+.venv/bin/python failure_breakdown.py && .venv/bin/python make_results.py && .venv/bin/python render_pallet.py
 ```
 
 ## Numbers

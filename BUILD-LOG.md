@@ -28,9 +28,10 @@ One time-boxed Claude Code session, 2026-11-09, start 14:19 EST. Simulation only
 - The first-fit baseline is only checked by the rule checker, not executed in physics.
 - Cases are fed from a sequencing buffer in the order the planner asks for (a teleport to the pick spot stands in for the conveyor).
 
+## Done (continued)
 - 14:45 sweep done (360 picks: 220 held, 131 peel, 9 pull); MLP trained (held-out 0.956 vs rule 0.700).
 - 14:45–14:58 eval, 50 pallets, 3 workers (745 s wall; machine load average 17–32 from the parallel build).
-- 14:58–15:01 pytest 9/9, render, `RESULTS.md`, README, commit.
+- 14:58–15:01 pytest 9/9, render, `failure_breakdown.py`, `RESULTS.md`, README, commit. End 15:01 (~42 min).
 
 ## Result in one line
 22 / 50 pallets fully correct. Failed pallets: drops (peel) 13 events, 32 unstable cases (knocked or
