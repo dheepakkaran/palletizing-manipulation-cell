@@ -1,0 +1,24 @@
+{
+  "n_total": 360,
+  "n_train": 270,
+  "n_test": 90,
+  "risky_rate_total": 0.3888888955116272,
+  "risky_rate_test": 0.42222222685813904,
+  "features": [
+    "off_x",
+    "off_y",
+    "mass",
+    "overlap",
+    "half_x",
+    "half_y"
+  ],
+  "model": "MLP 6-32-32-1, Adam lr 3e-3, 400 full-batch epochs, CPU",
+  "final_train_loss": 0.022858649492263794,
+  "heldout_accuracy_mlp": 0.9555555555555556,
+  "heldout_accuracy_rule": 0.7,
+  "rule": "risky if hypot(off_x, off_y) > 0.0420 m",
+  "heldout_accuracy_majority": 0.5777777433395386,
+  "mlp_recall_risky": 0.9210526315789473,
+  "mlp_precision_risky": 0.9722222222222222,
+  "split_seed": 0
+}

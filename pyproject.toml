@@ -1,0 +1,18 @@
+[project]
+name = "palletizing-manipulation-cell"
+version = "0.1.0"
+description = "Simulated mixed-case robotic palletizing cell: Franka Panda + vacuum gripper in MuJoCo, state machine, layer planner, OpenCV depth-camera quality metrics, PyTorch grasp-risk model (simulation only)"
+requires-python = ">=3.12,<3.13"
+dependencies = ["mujoco", "numpy", "opencv-python-headless", "torch", "pytest"]
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
