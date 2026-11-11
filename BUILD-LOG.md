@@ -16,8 +16,8 @@ One time-boxed Claude Code session, 2026-11-09, start 14:19 EST. Simulation only
   - Pad collision re-enabled while overlapping a just-released case flipped it -> pad collision stays off until the next approach.
 - 14:41 grasp sweep started (3 workers), `eval.py`, `tests/`, `make_results.py`, `render_pallet.py` written while it ran.
 
-## Cuts (vs IDEA.md / BUILD.md)
-- No ROS 2, no PCL, no cases/hour claim, one arm, 50 pallets (as BUILD.md says).
+## Cuts
+- No ROS 2, no PCL, no cases/hour claim, one arm, 50 pallets.
 - Gap metric is an axis-aligned estimate from detected centres and footprints, not a full contour distance.
 
 ## Honest limits
