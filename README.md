@@ -16,6 +16,10 @@ landed, and a small PyTorch model warns before risky grasps.
 ![pytorch](https://img.shields.io/badge/PyTorch-grasp%20model-EE4C2C?logo=pytorch&logoColor=white)
 ![tests](https://img.shields.io/badge/tests-9%20passing-22c55e)
 
+<a href="https://dheepakkaran.github.io/palletizing-manipulation-cell/#overview"><img src="docs/media/overview.webp" alt="35-second overview: the arm plans where each box goes, checks the grip, moves straight up and down, and a camera measures where each box landed" width="100%"></a>
+
+<sub>35-second overview (silent preview). <a href="https://dheepakkaran.github.io/palletizing-manipulation-cell/#overview">Watch it with sound on the project page →</a></sub>
+
 </div>
 
 > **Simulation only.** No real robot, gripper, conveyor or sensor. Independent learning project.
